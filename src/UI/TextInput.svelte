@@ -1,5 +1,5 @@
 <script>
-  export let controlType;
+  export let controlType = null;
   export let label;
   export let rows = 3;
   export let id;

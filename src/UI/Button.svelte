@@ -1,13 +1,13 @@
 <script>
-  export let type;
-  export let caption;
-  export let href;
-  export let mode;
+  export let type = 'button';
+  export let href = null;
+  export let mode = null;
+  export let color = null;
 </script>
 {#if href}
-  <a class={mode} {href}>{caption}</a>
+  <a class={mode} {href}><slot /></a>
 {:else}
-  <button class={mode} {type} on:click>{caption}</button>
+  <button class="{mode} {color}" {type} on:click><slot /></button>
 {/if}
 
 <style>
