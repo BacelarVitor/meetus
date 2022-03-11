@@ -3,6 +3,7 @@
   import TextInput from '../UI/TextInput.svelte';
   import Modal from '../UI/Modal.svelte';
   import  Button from '../UI/Button.svelte';
+  import { isEmpty } from '../helpers/validation.js';
 
   onMount(() => {
     newMeetUP = {
@@ -37,14 +38,58 @@
   const cancel = () => {
     dispath('cancel');
   }
+
+  $: isTitleValid = !isEmpty(newMeetUP.title);
+  $: isSubtitleValid = !isEmpty(newMeetUP.subtitle);
+  $: isImageUrlValid = !isEmpty(newMeetUP.imageUrl);
+  $: isDescriptionValid = !isEmpty(newMeetUP.description);
+  $: isAddressValid = !isEmpty(newMeetUP.address);
+  $: isContactEmailValid = !isEmpty(newMeetUP.contactEmail);
+  $: isFormValid = isTitleValid && isSubtitleValid && isImageUrlValid && isDescriptionValid && isAddressValid && isContactEmailValid
+  
 </script>
 <Modal title="Enter MeetUp data" on:cancel>
   <form>
-    <TextInput label="title" id="title" value={newMeetUP.title} on:input={e => newMeetUP.title = e.target.value} />
-    <TextInput label="subtitle" id="subtitle" value={newMeetUP.subtitle} on:input={e => newMeetUP.subtitle = e.target.value} />
-    <TextInput label="address" id="address" value={newMeetUP.address} on:input={e => newMeetUP.address = e.target.value} />
-    <TextInput label="image" id="image" value={newMeetUP.imageUrl} on:input={e => newMeetUP.imageUrl = e.target.value} />
+    <TextInput 
+      isValid = {isTitleValid}
+      required="true"
+      validityMessage='Please enter a title.'
+      label="title" 
+      id="title" 
+      value={newMeetUP.title} 
+      on:input={e => newMeetUP.title = e.target.value} 
+    />
+    <TextInput 
+      isValid = {isSubtitleValid}
+      required="true"
+      validityMessage='Please enter a subtitle.'
+      label="subtitle" 
+      id="subtitle" 
+      value={newMeetUP.subtitle} 
+      on:input={e => newMeetUP.subtitle = e.target.value} 
+    />
+    <TextInput 
+      isValid = {isAddressValid}
+      required="true"
+      validityMessage='Please enter a address.'
+      label="address" 
+      id="address" 
+      value={newMeetUP.address} 
+      on:input={e => newMeetUP.address = e.target.value} 
+    />
+    <TextInput 
+      isValid = {isImageUrlValid}
+      required="true"
+      validityMessage='Please enter a image url.'
+      label="image" 
+      id="image" 
+      value={newMeetUP.imageUrl} 
+      on:input={e => newMeetUP.imageUrl = e.target.value} 
+    />
     <TextInput
+      isValid = {isContactEmailValid}
+      required="true"
+      validityMessage='Please enter a email.'
       label="email"
       id="email"
       type="email"
@@ -53,18 +98,21 @@
        = e.target.value}
     />
     <TextInput
+      isValid = {isDescriptionValid}
+      required="true"
+      validityMessage='Please enter a description.'
       label="description"
       id="description"
       controlType="textarea"
       rows="3"
-      value={newMeetUP.description}
+      bind:value={newMeetUP.description}
       on:input={e => newMeetUP.description
         = e.target.value}
     />
   </form>
   <div slot="footer">
     <Button type="button" mode="outline" on:click={cancel}>Cancel</Button>
-    <Button type="button"  on:click={submitForm}>Save</Button>
+    <Button type="button" disabled={!isFormValid} on:click={submitForm}>Save</Button>
   </div>
 </Modal>  
 <style>
