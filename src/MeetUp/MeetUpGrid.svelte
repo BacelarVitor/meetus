@@ -6,7 +6,7 @@
 <section id="meetups">
   {#each meetUps as meetUp, i (meetUp.id)}
     <!-- svelte-ignore missing-declaration -->
-    <MeetUp {...meetUp} on:togglefavorite />
+    <MeetUp {...meetUp} />
   {/each}
 </section>
 

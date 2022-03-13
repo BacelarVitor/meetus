@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import meetUps from './meetups-store';
   import Button from '../UI/Button.svelte';
   import Badge from '../UI/Badge.svelte';
 
@@ -12,7 +12,9 @@
   export let contactEmail;
   export let isFavorite;
 
-  const dispatch = new createEventDispatcher();
+  const toggleFavorite = () => {
+    meetUps.toggleFavorite(id);
+  }
 </script>
 
 <article>
@@ -34,7 +36,7 @@
   </div>
   <footer>
     <Button href="mailto:{contactEmail}">Contact</Button>     
-    <Button mode="outline" color={isFavorite ? null : 'success'} on:click={() => dispatch('togglefavorite', { id })}>{isFavorite ? 'Unfavorite' : 'Favorite'}</Button>
+    <Button mode="outline" color={isFavorite ? null : 'success'} on:click={toggleFavorite}>{isFavorite ? 'Unfavorite' : 'Favorite'}</Button>
     <Button>Show Details</Button>
   </footer>
 </article>
