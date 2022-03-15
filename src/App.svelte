@@ -35,13 +35,10 @@
 <Header />
 <main>
   {#if page === 'list'}
-    <div class="meetup-controls">
-      <Button on:click={toggleShowForm}>New MeetUp</Button>
-    </div>
     {#if showForm}
         <EditForm on:save={toggleShowForm}  on:cancel={toggleShowForm} id={meetUpId} />
     {/if}
-    <MeetUpGrid meetUps={$meetUps}  on:showdetails={showDetails} on:edit={editMeetUp}/>
+    <MeetUpGrid meetUps={$meetUps}  on:showdetails={showDetails} on:edit={editMeetUp} on:add={toggleShowForm}/>
   {:else} 
     <MeetUpDetails id={meetUpId} on:close={goToList} />
   {/if}
@@ -51,9 +48,4 @@
   main {
     margin-top: 5rem;
   }
-
-  .meetup-controls {
-    margin: 1rem;
-  }
-  
 </style>
