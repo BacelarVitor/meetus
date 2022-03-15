@@ -41,10 +41,26 @@ function addMeetUp(meetUpData) {
   meetups.update(items => [{...meetUpData, id: items.length + 1, isFavorite: false}, ...items]);
 }
 
+function updateMeetUp(id, meetUpData) {
+  meetups.update(items => {
+    const index = items.findIndex(m => m.id === id);
+    if(index >= 0) {
+      items[index] = meetUpData;
+      return [...items];
+    }
+  });
+}
+
+function deleteMeetUp(id) {
+  meetups.update(items => items.filter(m => m.id !== id));
+}
+
 const customStorage = {
   subscribe: meetups.subscribe,
   toggleFavorite,
-  addMeetUp
+  addMeetUp,
+  updateMeetUp,
+  deleteMeetUp
 }
 
 
