@@ -1,5 +1,8 @@
 <script>
   import { createEventDispatcher } from 'svelte';
+  import { scale } from 'svelte/transition';
+  import { flip } from 'svelte/animate'; 
+  import { cubicInOut } from 'svelte/easing';
   import MeetUp from './MeetUpItem.svelte';
   import MeetUpFilter from './MeetUpFilter.svelte';
   import Button from '../UI/Button.svelte';
@@ -15,14 +18,16 @@
 
   const dispatch = createEventDispatcher();
 </script>
+
 <section id="meetup-controls">
   <MeetUpFilter on:selected={filter} />
   <Button on:click={() => dispatch('add')}>New MeetUp</Button>
 </section>
 <section id="meetups">
-  {#each filteredMeetUps as meetUp, i (meetUp.id)}
-    <!-- svelte-ignore missing-declaration -->
-    <MeetUp {...meetUp}  on:showdetails on:edit />
+  {#each filteredMeetUps as meetUp (meetUp.id)}
+    <div transition:scale animate:flip={{ duration: 500, easing: cubicInOut}}>
+      <MeetUp {...meetUp}  on:showdetails on:edit />
+    </div>
   {/each}
 </section>
 

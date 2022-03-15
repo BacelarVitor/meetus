@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher, onDestroy, onMount } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import TextInput from '../UI/TextInput.svelte';
   import Modal from '../UI/Modal.svelte';
   import  Button from '../UI/Button.svelte';
@@ -27,21 +27,6 @@
   });
 
   unsubscribe();
-  // onMount(() => {
-  //   meetUp = {
-  //     id: 0,
-  //     title: "",
-  //     subtitle: "",
-  //     imageUrl: "",
-  //     description: "",
-  //     address: "",
-  //     contactEmail: "",
-  //     isFavorite: false
-  //   };
-
-    
-  // })
-
  
   const dispath = new createEventDispatcher();
 
@@ -75,10 +60,8 @@
   $: isAddressValid = !isEmpty(meetUp.address);
   $: isContactEmailValid = !isEmpty(meetUp.contactEmail);
   $: isFormValid = isTitleValid && isSubtitleValid && isImageUrlValid && isDescriptionValid && isAddressValid && isContactEmailValid
-  
-
-
 </script>
+
 <Modal title="Enter MeetUp data" on:cancel>
   <form>
     <TextInput 
