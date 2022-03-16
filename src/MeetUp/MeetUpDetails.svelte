@@ -15,7 +15,7 @@
 
 </script>
 
-<section  transition:fly={{ y:300 }}>
+<section>
   <div class="image">
     <img src={meetUp.imageUrl} alt={meetUp.title}>
   </div>
