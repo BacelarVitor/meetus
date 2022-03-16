@@ -3,6 +3,7 @@
   import MeetUpGrid from './MeetUp/MeetUpGrid.svelte';
   import MeetUpDetails from './MeetUp/MeetUpDetails.svelte';
   import EditForm from './MeetUp/MeetUpForm.svelte';
+  import { fly } from 'svelte/transition';
 
   import meetUps from './MeetUp/meetups-store'
 
@@ -40,7 +41,9 @@
     {/if}
     <MeetUpGrid meetUps={$meetUps}  on:showdetails={showDetails} on:edit={editMeetUp} on:add={toggleShowForm}/>
   {:else} 
-    <MeetUpDetails id={meetUpId} on:close={goToList} />
+    <div transition:fly={{ y:300 }}>
+      <MeetUpDetails id={meetUpId} on:close={goToList} />
+    </div>
   {/if}
 </main>
 
