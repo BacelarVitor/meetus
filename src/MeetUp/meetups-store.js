@@ -82,8 +82,7 @@ const customStorage = {
       return res.json()
     })
     .then(data => { 
-      console.log({data, keys: Object.keys(data), values: Object.entries(data) });
-      const meets = data && data.length > 0 ? data.map(meetUp => ({id: Object.keys(meetUp), ...Object.Values(meetUp)})) : [{id: Object.keys(data)[0], ...Object.values(data)[0]}];
+      const meets = Object.entries(data).map(m => Object.values(m)).map(x => ({id: x[0], ...x[1]}))
       meetups.set(meets);
     })
   
