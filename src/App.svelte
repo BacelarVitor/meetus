@@ -2,11 +2,11 @@
   import Header from './UI/Header.svelte';
   import MeetUpGrid from './MeetUp/MeetUpGrid.svelte';
   import MeetUpDetails from './MeetUp/MeetUpDetails.svelte';
-
   import EditForm from './MeetUp/MeetUpForm.svelte';
-  import Button from './UI/Button.svelte';
 
   import meetUps from './MeetUp/meetups-store'
+
+  meetUps.get();
 
   let showForm = false;
   let page = 'list'
