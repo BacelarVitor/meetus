@@ -1,5 +1,6 @@
 <script>
   import { createEventDispatcher, onDestroy } from 'svelte';
+  import { fly } from 'svelte/transition';
   import meetUps from './meetups-store';
   import Button from '../UI/Button.svelte';
 
@@ -14,7 +15,7 @@
 
 </script>
 
-<section >
+<section  transition:fly={{ y:300 }}>
   <div class="image">
     <img src={meetUp.imageUrl} alt={meetUp.title}>
   </div>

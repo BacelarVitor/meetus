@@ -2,7 +2,6 @@
   import { createEventDispatcher } from 'svelte';
   import { scale } from 'svelte/transition';
   import { flip } from 'svelte/animate'; 
-  import { cubicInOut } from 'svelte/easing';
   import MeetUp from './MeetUpItem.svelte';
   import MeetUpFilter from './MeetUpFilter.svelte';
   import Button from '../UI/Button.svelte';
@@ -25,7 +24,7 @@
 </section>
 <section id="meetups">
   {#each filteredMeetUps as meetUp (meetUp.id)}
-    <div transition:scale animate:flip={{ duration: 500, easing: cubicInOut}}>
+    <div transition:scale animate:flip={{ duration: 500 }}>
       <MeetUp {...meetUp}  on:showdetails on:edit />
     </div>
   {/each}
