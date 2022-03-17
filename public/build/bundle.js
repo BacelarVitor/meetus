@@ -1185,17 +1185,31 @@ var app = (function () {
 
     const baseUrl = 'https://meetus-5dafa-default-rtdb.firebaseio.com/';
     const get = (resorce, headers = {}) => {
-      return fetch(`${baseUrl}/${resorce}.json`, {headers, method: 'GET'});
+      return fetch(getUrl(resorce), { method: 'GET', headers});
     };
 
-    const post = (resorce, body, headers = {'Content-Type': 'application/json'}) => {
-      return fetch(`${baseUrl}${resorce}.json`, {method: 'POST', headers, body: JSON.stringify(body)});
+    const getUrl = (resource) => `${baseUrl}${resource}.json`;
+
+    const post = (resource, body, headers = {'Content-Type': 'application/json'}) => {
+      return fetch(getUrl(resource), { method: 'POST', headers, body: JSON.stringify(body)});
     };
+
+    const put = (resource, id, body, headers = {'Content-Type': 'application/json'}) => {
+      return fetch(getUrl(`${resource}/${id}`), { method: 'PUT', headers, body: JSON.stringify(body)});
+    };
+
+
+    const deleteMeetup = (resource, id, headers = {'Content-Type': 'application/json'}) => {
+      return fetch(getUrl(`${resource}/${id}`), { method: 'DELETE', headers });
+    };
+
 
     const http = {
       baseUrl,
       get,
-      post
+      post,
+      put,
+      delete: deleteMeetup
     };
 
     const resorce = 'meetups';
@@ -1230,7 +1244,9 @@ var app = (function () {
         const meetUp = items.find(m => m.id === id);
         if(meetUp) {
           meetUp.isFavorite = !meetUp.isFavorite;
+          updateMeetUp(meetUp.id, meetUp);
         }
+
         return items;
       });
     }
@@ -1251,17 +1267,38 @@ var app = (function () {
     }
 
     function updateMeetUp(id, meetUpData) {
-      meetups.update(items => {
-        const index = items.findIndex(m => m.id === id);
-        if(index >= 0) {
-          items[index] = meetUpData;
-          return [...items];
-        }
-      });
+      http.put(resorce, id, meetUpData)
+      .then(res => {
+        if(!res.ok)
+          throw Error('An error occurred!');
+        
+        return res.json()
+      })
+      .then(data => {
+        meetups.update(items => {
+          const index = items.findIndex(m => m.id === id);
+          if(index >= 0) {
+            items[index] = meetUpData;
+            return [...items];
+          }
+        });
+      })
+      .catch(err => console.log(err));
     }
 
     function deleteMeetUp(id) {
-      meetups.update(items => items.filter(m => m.id !== id));
+      http.delete(resorce, id)
+      .then(res => {
+        if(!res.ok)
+          throw Error('An error occurred!');
+        
+        return res.json()
+      })
+      .then(data => {
+        meetups.update(items => items.filter(m => m.id !== id));
+      })
+      .catch(err => console.log(err));
+
     }
 
     const customStorage = {
@@ -2949,7 +2986,6 @@ var app = (function () {
     	let button0;
     	let t9;
     	let button1;
-    	let section_transition;
     	let current;
 
     	button0 = new Button({
@@ -2996,17 +3032,17 @@ var app = (function () {
     			if (!src_url_equal(img.src, img_src_value = /*meetUp*/ ctx[0].imageUrl)) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", img_alt_value = /*meetUp*/ ctx[0].title);
     			attr_dev(img, "class", "svelte-2xcxsx");
-    			add_location(img, file$4, 19, 4, 496);
+    			add_location(img, file$4, 19, 4, 468);
     			attr_dev(div0, "class", "image svelte-2xcxsx");
-    			add_location(div0, file$4, 18, 2, 471);
+    			add_location(div0, file$4, 18, 2, 443);
     			attr_dev(h1, "class", "svelte-2xcxsx");
-    			add_location(h1, file$4, 22, 4, 583);
+    			add_location(h1, file$4, 22, 4, 555);
     			attr_dev(h2, "class", "svelte-2xcxsx");
-    			add_location(h2, file$4, 23, 4, 612);
+    			add_location(h2, file$4, 23, 4, 584);
     			attr_dev(p, "class", "svelte-2xcxsx");
-    			add_location(p, file$4, 24, 4, 644);
+    			add_location(p, file$4, 24, 4, 616);
     			attr_dev(div1, "class", "content svelte-2xcxsx");
-    			add_location(div1, file$4, 21, 2, 556);
+    			add_location(div1, file$4, 21, 2, 528);
     			attr_dev(section, "class", "svelte-2xcxsx");
     			add_location(section, file$4, 17, 0, 430);
     		},
@@ -3068,26 +3104,17 @@ var app = (function () {
     			if (current) return;
     			transition_in(button0.$$.fragment, local);
     			transition_in(button1.$$.fragment, local);
-
-    			add_render_callback(() => {
-    				if (!section_transition) section_transition = create_bidirectional_transition(section, fly, { y: 300 }, true);
-    				section_transition.run(1);
-    			});
-
     			current = true;
     		},
     		o: function outro(local) {
     			transition_out(button0.$$.fragment, local);
     			transition_out(button1.$$.fragment, local);
-    			if (!section_transition) section_transition = create_bidirectional_transition(section, fly, { y: 300 }, false);
-    			section_transition.run(0);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(section);
     			destroy_component(button0);
     			destroy_component(button1);
-    			if (detaching && section_transition) section_transition.end();
     		}
     	};
 

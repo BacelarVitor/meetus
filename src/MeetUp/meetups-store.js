@@ -33,7 +33,9 @@ function toggleFavorite(id) {
     const meetUp = items.find(m => m.id === id)
     if(meetUp) {
       meetUp.isFavorite = !meetUp.isFavorite;
+      updateMeetUp(meetUp.id, meetUp)
     }
+
     return items;
   })
 }
@@ -54,17 +56,38 @@ function addMeetUp(meetUpData) {
 }
 
 function updateMeetUp(id, meetUpData) {
-  meetups.update(items => {
-    const index = items.findIndex(m => m.id === id);
-    if(index >= 0) {
-      items[index] = meetUpData;
-      return [...items];
-    }
-  });
+  http.put(resorce, id, meetUpData)
+  .then(res => {
+    if(!res.ok)
+      throw Error('An error occurred!');
+    
+    return res.json()
+  })
+  .then(data => {
+    meetups.update(items => {
+      const index = items.findIndex(m => m.id === id);
+      if(index >= 0) {
+        items[index] = meetUpData;
+        return [...items];
+      }
+    });
+  })
+  .catch(err => console.log(err));
 }
 
 function deleteMeetUp(id) {
-  meetups.update(items => items.filter(m => m.id !== id));
+  http.delete(resorce, id)
+  .then(res => {
+    if(!res.ok)
+      throw Error('An error occurred!');
+    
+    return res.json()
+  })
+  .then(data => {
+    meetups.update(items => items.filter(m => m.id !== id));
+  })
+  .catch(err => console.log(err));
+
 }
 
 const customStorage = {
