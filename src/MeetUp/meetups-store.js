@@ -108,7 +108,7 @@ const customStorage = {
       const meets = Object.entries(data).map(m => Object.values(m)).map(x => ({id: x[0], ...x[1]}))
       meetups.set(meets);
     })
-  
+    return true;
   }
 
 }

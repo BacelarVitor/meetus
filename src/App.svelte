@@ -6,12 +6,16 @@
   import { fly } from 'svelte/transition';
 
   import meetUps from './MeetUp/meetups-store'
+  import LoadingSpinner from './UI/LoadingSpinner.svelte';
 
-  meetUps.get();
+  let isLoading = true;
+  isLoading = !meetUps.get();
+ 
 
   let showForm = false;
   let page = 'list'
   let meetUpId = null;
+
 
   function toggleShowForm() {
     showForm = !showForm;
@@ -39,7 +43,11 @@
     {#if showForm}
         <EditForm on:save={toggleShowForm}  on:cancel={toggleShowForm} id={meetUpId} />
     {/if}
-    <MeetUpGrid meetUps={$meetUps}  on:showdetails={showDetails} on:edit={editMeetUp} on:add={toggleShowForm}/>
+    {#if isLoading} 
+      <LoadingSpinner />
+    {:else} 
+      <MeetUpGrid meetUps={$meetUps}  on:showdetails={showDetails} on:edit={editMeetUp} on:add={toggleShowForm}/>
+    {/if}
   {:else} 
     <div transition:fly={{ y:300 }}>
       <MeetUpDetails id={meetUpId} on:close={goToList} />
