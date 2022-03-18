@@ -42,8 +42,13 @@ function toggleFavorite(id, isFavorite) {
     
         return items;
       })
+      return true;
   })
-  .catch(err => console.log(err));
+  .catch(err => {
+    console.log(err)
+    return true;
+  });
+  return true;
 }
 
 function addMeetUp(meetUpData) {
@@ -57,8 +62,13 @@ function addMeetUp(meetUpData) {
   })
   .then(data => {
     meetups.update(items => [{...newMeetUp, id: data.name}, ...items])
+    return true;
   })
-  .catch(err => console.log(err));
+  .catch(err => { 
+    console.log(err) 
+    return true;
+  });
+  return true;
 }
 
 function updateMeetUp(id, meetUpData) {
@@ -78,8 +88,13 @@ function updateMeetUp(id, meetUpData) {
         return [...items];
       }
     });
+    return true;
   })
-  .catch(err => console.log(err));
+  .catch(err => {
+    console.log(err)
+    return true;
+  });
+  return true;
 }
 
 function patch(id, meetUpData) {
@@ -98,8 +113,13 @@ function patch(id, meetUpData) {
         return [...items];
       }
     });
+    return true;
   })
-  .catch(err => console.log(err));
+  .catch(err => {
+    console.log(err)
+    return true;
+  });
+  return true;
 }
 
 function deleteMeetUp(id) {
@@ -114,7 +134,7 @@ function deleteMeetUp(id) {
     meetups.update(items => items.filter(m => m.id !== id));
   })
   .catch(err => console.log(err));
-
+  return true;
 }
 
 const customStorage = {

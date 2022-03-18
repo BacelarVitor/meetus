@@ -12,9 +12,11 @@
   export let description;
   export let address;
   export let isFavorite;
+  let isLoading = false;
 
   const toggleFavorite = () => {
-    meetUps.toggleFavorite(id, isFavorite);
+    isLoading = true;
+    isLoading = !meetUps.toggleFavorite(id, isFavorite);
   }
 
   const dispacth = createEventDispatcher();
@@ -39,7 +41,11 @@
   </div>
   <footer>
     <Button on:click={() => dispacth('edit', {id})}>Edit</Button>     
-    <Button mode="outline" color={isFavorite ? null : 'success'} on:click={toggleFavorite}>{isFavorite ? 'Unfavorite' : 'Favorite'}</Button>
+    {#if isLoading} 
+      <Button mode="outline" color={isFavorite ? null : 'success'} disabled="true">{isFavorite ? 'Unfavoriting...' : 'Favoriting...'}</Button>
+    {:else}
+      <Button mode="outline" color={isFavorite ? null : 'success'} on:click={toggleFavorite}>{isFavorite ? 'Unfavorite' : 'Favorite'}</Button>
+    {/if}
     <Button on:click={() => dispacth('showdetails', { id })}>Show Details</Button>
   </footer>
 </article>
