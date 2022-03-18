@@ -133,7 +133,7 @@ const customStorage = {
       return res.json()
     })
     .then(data => { 
-      const meets = Object.entries(data).map(m => Object.values(m)).map(x => ({id: x[0], ...x[1]}))
+      const meets = Object.entries(data).map(m => Object.values(m)).map(x => ({id: x[0], ...x[1]})).reverse()
       meetups.set(meets);
     })
     return true;
