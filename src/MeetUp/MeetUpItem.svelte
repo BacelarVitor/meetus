@@ -11,7 +11,6 @@
   export let imageUrl;
   export let description;
   export let address;
-  export let contactEmail;
   export let isFavorite;
 
   const toggleFavorite = () => {

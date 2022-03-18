@@ -1,6 +1,5 @@
 <script>
-  import { createEventDispatcher, onDestroy } from 'svelte';
-  import { fly } from 'svelte/transition';
+  import { createEventDispatcher, onDestroy, onMount } from 'svelte';
   import meetUps from './meetups-store';
   import Button from '../UI/Button.svelte';
 
@@ -8,7 +7,6 @@
   let meetUp; 
 
   const unsubscribe = meetUps.subscribe(items => meetUp = items.find(m => m.id === id));
-
   const dispacth = createEventDispatcher();
 
   onDestroy(() => unsubscribe());
@@ -24,7 +22,7 @@
     <h2>{meetUp.subtitle}</h2>
     <p>{meetUp.description} - {meetUp.address}</p>
 
-    <Button href="mailto:{meetUp.contactMail}">Contact</Button>
+    <Button href="mailto:{meetUp.contactEmail}">Contact</Button>
     <Button mode="outline" on:click={() => dispacth('close')}>Close</Button>
   </div>
 </section>
