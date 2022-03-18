@@ -28,18 +28,22 @@ const meetups = writable([
   // },
 ]);
 
-function toggleFavorite(id) {
-  meetups.update(items => {
-    const meetUp = items.find(m => m.id === id)
-    if(meetUp) {
-      meetUp.isFavorite = !meetUp.isFavorite;
-      http.patch(resorce, meetUp.id, {isFavorite: meetUp.isFavorite}).catch(error => {
-        meetUp.isFavorite = !meetUp.isFavorite;
-      });
-    }
-
-    return items;
+function toggleFavorite(id, isFavorite) {
+  http.patch(resorce, id, { isFavorite: !isFavorite })
+  .then(res => {
+    if (!res.ok)
+      throw new Error('An error occurred. Please try again');
+      meetups.update(items => {
+        const meetUp = items.find(m => m.id === id)
+        if(meetUp) {
+          meetUp.isFavorite = !meetUp.isFavorite;
+          
+        }
+    
+        return items;
+      })
   })
+  .catch(err => console.log(err));
 }
 
 function addMeetUp(meetUpData) {

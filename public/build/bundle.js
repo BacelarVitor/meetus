@@ -1243,18 +1243,22 @@ var app = (function () {
       // },
     ]);
 
-    function toggleFavorite(id) {
-      meetups.update(items => {
-        const meetUp = items.find(m => m.id === id);
-        if(meetUp) {
-          meetUp.isFavorite = !meetUp.isFavorite;
-          http.patch(resorce, meetUp.id, {isFavorite: meetUp.isFavorite}).catch(error => {
-            meetUp.isFavorite = !meetUp.isFavorite;
+    function toggleFavorite(id, isFavorite) {
+      http.patch(resorce, id, { isFavorite: !isFavorite })
+      .then(res => {
+        if (!res.ok)
+          throw new Error('An error occurred. Please try again');
+          meetups.update(items => {
+            const meetUp = items.find(m => m.id === id);
+            if(meetUp) {
+              meetUp.isFavorite = !meetUp.isFavorite;
+              
+            }
+        
+            return items;
           });
-        }
-
-        return items;
-      });
+      })
+      .catch(err => console.log(err));
     }
 
     function addMeetUp(meetUpData) {
@@ -2070,27 +2074,27 @@ var app = (function () {
     			t11 = space();
     			create_component(button2.$$.fragment);
     			attr_dev(h1, "class", "svelte-9nxog3");
-    			add_location(h1, file$8, 25, 4, 547);
+    			add_location(h1, file$8, 25, 4, 559);
     			attr_dev(h2, "class", "svelte-9nxog3");
-    			add_location(h2, file$8, 31, 4, 654);
+    			add_location(h2, file$8, 31, 4, 666);
     			attr_dev(p0, "class", "svelte-9nxog3");
-    			add_location(p0, file$8, 32, 4, 679);
+    			add_location(p0, file$8, 32, 4, 691);
     			attr_dev(header, "class", "svelte-9nxog3");
-    			add_location(header, file$8, 24, 2, 533);
+    			add_location(header, file$8, 24, 2, 545);
     			if (!src_url_equal(img.src, img_src_value = /*imageUrl*/ ctx[3])) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", /*title*/ ctx[1]);
     			attr_dev(img, "class", "svelte-9nxog3");
-    			add_location(img, file$8, 35, 4, 737);
+    			add_location(img, file$8, 35, 4, 749);
     			attr_dev(div0, "class", "image svelte-9nxog3");
-    			add_location(div0, file$8, 34, 2, 712);
+    			add_location(div0, file$8, 34, 2, 724);
     			attr_dev(p1, "class", "svelte-9nxog3");
-    			add_location(p1, file$8, 38, 4, 812);
+    			add_location(p1, file$8, 38, 4, 824);
     			attr_dev(div1, "class", "content svelte-9nxog3");
-    			add_location(div1, file$8, 37, 2, 785);
+    			add_location(div1, file$8, 37, 2, 797);
     			attr_dev(footer, "class", "svelte-9nxog3");
-    			add_location(footer, file$8, 40, 2, 846);
+    			add_location(footer, file$8, 40, 2, 858);
     			attr_dev(article, "class", "svelte-9nxog3");
-    			add_location(article, file$8, 23, 0, 520);
+    			add_location(article, file$8, 23, 0, 532);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2231,7 +2235,7 @@ var app = (function () {
     	let { isFavorite } = $$props;
 
     	const toggleFavorite = () => {
-    		customStorage.toggleFavorite(id);
+    		customStorage.toggleFavorite(id, isFavorite);
     	};
 
     	const dispacth = createEventDispatcher();

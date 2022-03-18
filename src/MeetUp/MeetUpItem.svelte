@@ -15,7 +15,7 @@
   export let isFavorite;
 
   const toggleFavorite = () => {
-    meetUps.toggleFavorite(id);
+    meetUps.toggleFavorite(id, isFavorite);
   }
 
   const dispacth = createEventDispatcher();
