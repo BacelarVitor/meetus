@@ -1198,6 +1198,9 @@ var app = (function () {
       return fetch(getUrl(`${resource}/${id}`), { method: 'PUT', headers, body: JSON.stringify(body)});
     };
 
+    const patch$1 = (resource, id, body, headers = {'Content-Type': 'application/json'}) => {
+      return fetch(getUrl(`${resource}/${id}`), { method: 'PATCH', headers, body: JSON.stringify(body)});
+    };
 
     const deleteMeetup = (resource, id, headers = {'Content-Type': 'application/json'}) => {
       return fetch(getUrl(`${resource}/${id}`), { method: 'DELETE', headers });
@@ -1209,6 +1212,7 @@ var app = (function () {
       get,
       post,
       put,
+      patch: patch$1,
       delete: deleteMeetup
     };
 
@@ -1244,7 +1248,9 @@ var app = (function () {
         const meetUp = items.find(m => m.id === id);
         if(meetUp) {
           meetUp.isFavorite = !meetUp.isFavorite;
-          updateMeetUp(meetUp.id, meetUp);
+          http.patch(resorce, meetUp.id, {isFavorite: meetUp.isFavorite}).catch(error => {
+            meetUp.isFavorite = !meetUp.isFavorite;
+          });
         }
 
         return items;
@@ -1267,6 +1273,7 @@ var app = (function () {
     }
 
     function updateMeetUp(id, meetUpData) {
+      delete meetUpData.id;
       http.put(resorce, id, meetUpData)
       .then(res => {
         if(!res.ok)
@@ -1278,7 +1285,27 @@ var app = (function () {
         meetups.update(items => {
           const index = items.findIndex(m => m.id === id);
           if(index >= 0) {
-            items[index] = meetUpData;
+            items[index] = {...meetUpData, id };
+            return [...items];
+          }
+        });
+      })
+      .catch(err => console.log(err));
+    }
+
+    function patch(id, meetUpData) {
+      http.patch(resorce, id, meetUpData)
+      .then(res => {
+        if(!res.ok)
+          throw Error('An error occurred!');
+        
+        return res.json()
+      })
+      .then(data => {
+        meetups.update(items => {
+          const index = items.findIndex(m => m.id === id);
+          if(index >= 0) {
+            items[index] = {...items[index], ...meetUpData};
             return [...items];
           }
         });
@@ -1306,6 +1333,7 @@ var app = (function () {
       toggleFavorite,
       addMeetUp,
       updateMeetUp,
+      patch,
       deleteMeetUp,
       get: () => { 
         http.get(resorce)

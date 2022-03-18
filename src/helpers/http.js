@@ -14,7 +14,7 @@ const put = (resource, id, body, headers = {'Content-Type': 'application/json'})
 }
 
 const patch = (resource, id, body, headers = {'Content-Type': 'application/json'}) => {
-  return fetch(getUrl(`${resource}/${id}`), { method: 'PUT', headers, body: JSON.stringify(body)});
+  return fetch(getUrl(`${resource}/${id}`), { method: 'PATCH', headers, body: JSON.stringify(body)});
 }
 
 const deleteMeetup = (resource, id, headers = {'Content-Type': 'application/json'}) => {
@@ -27,6 +27,7 @@ const http = {
   get,
   post,
   put,
+  patch,
   delete: deleteMeetup
 }
 

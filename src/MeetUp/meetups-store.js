@@ -33,7 +33,9 @@ function toggleFavorite(id) {
     const meetUp = items.find(m => m.id === id)
     if(meetUp) {
       meetUp.isFavorite = !meetUp.isFavorite;
-      updateMeetUp(meetUp.id, meetUp)
+      http.patch(resorce, meetUp.id, {isFavorite: meetUp.isFavorite}).catch(error => {
+        meetUp.isFavorite = !meetUp.isFavorite;
+      });
     }
 
     return items;
@@ -56,6 +58,7 @@ function addMeetUp(meetUpData) {
 }
 
 function updateMeetUp(id, meetUpData) {
+  delete meetUpData.id;
   http.put(resorce, id, meetUpData)
   .then(res => {
     if(!res.ok)
@@ -67,7 +70,27 @@ function updateMeetUp(id, meetUpData) {
     meetups.update(items => {
       const index = items.findIndex(m => m.id === id);
       if(index >= 0) {
-        items[index] = meetUpData;
+        items[index] = {...meetUpData, id };
+        return [...items];
+      }
+    });
+  })
+  .catch(err => console.log(err));
+}
+
+function patch(id, meetUpData) {
+  http.patch(resorce, id, meetUpData)
+  .then(res => {
+    if(!res.ok)
+      throw Error('An error occurred!');
+    
+    return res.json()
+  })
+  .then(data => {
+    meetups.update(items => {
+      const index = items.findIndex(m => m.id === id);
+      if(index >= 0) {
+        items[index] = {...items[index], ...meetUpData};
         return [...items];
       }
     });
@@ -95,6 +118,7 @@ const customStorage = {
   toggleFavorite,
   addMeetUp,
   updateMeetUp,
+  patch,
   deleteMeetUp,
   get: () => { 
     http.get(resorce)
